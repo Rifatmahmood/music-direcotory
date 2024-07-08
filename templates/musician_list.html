@@ -1,75 +1,83 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container mt-4">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Musician Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Album Rating</th>
-            <th scope="col">Instrument Type</th>
-            <th scope="col">Album Name</th>
-            <th scope="col">Release Date</th>
-            <th scope="col">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% if musicians %}
-        {% for musician in musicians %}
-        <tr>
-            <th scope="row">{{ forloop.counter }}</th>
-            <td>
-                <a href="{% url 'musician_update' musician.id %}">
-                    {{ musician.first_name }} {{ musician.last_name }}
-                </a>
-            </td>
-            <td>{{ musician.email }}</td>
-            <td>
-                {% for album in albums %}
-                {% if album.musician_id == musician.id %}
-                {{ album.rating }}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Musician Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Album Rating</th>
+                <th scope="col">Instrument Type</th>
+                <th scope="col">Album Name</th>
+                <th scope="col">Release Date</th>
+                {% if user.is_authenticated %}
+                <th scope="col">Actions</th>
                 {% endif %}
-                {% endfor %}
-            </td>
-            <td>{{ musician.instrument_type }}</td>
-            <td>
-                {% for album in albums %}
-                {% if album.musician_id == musician.id %}
-                {{ album.album_name }}
-                {% endif %}
-                {% endfor %}
-            </td>
-            <td>
-                {% for album in albums %}
-                {% if album.musician_id == musician.id %}
-                {{ album.release_date }}
-                {% endif %}
-                {% endfor %}
-            </td>
-            <td>
-                {% for album in albums %}
-                {% if album.musician_id == musician.id %}
-                <a href="{% url 'edit_album' album.id %}">
-                    <button type="button" class="btn btn-primary">Edit</button>
-                </a>
-                {% endif %}
-                {% endfor %}
-                <a href="{% url 'musician_delete' musician.id %}">
-                    <button type="button" class="btn btn-danger">Delete</button>
-                </a>
-            </td>
-        </tr>
-        {% endfor %}
-        {% else %}
-        <tr>
-            <td colspan="8" style="font-size:60px;">
-                <p class="text-center">No musicians found.</p>
-            </td>
-        </tr>
-        
-        {% endif %}
-    </tbody>
-</table>
+            </tr>
+        </thead>
+        <tbody>
+            {% if musicians %}
+            {% for musician in musicians %}
+            <tr>
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>
+                    <a href="{% url 'musician_update' musician.id %}">
+                        {{ musician.first_name }} {{ musician.last_name }}
+                    </a>
+                </td>
+                <td>{{ musician.email }}</td>
+                <td>
+                    {% for album in albums %}
+                    {% if album.musician_id == musician.id %}
+                    {{ album.rating }}
+                    {% endif %}
+                    {% endfor %}
+                </td>
+                <td>{{ musician.instrument_type }}</td>
+                <td>
+                    {% for album in albums %}
+                    {% if album.musician_id == musician.id %}
+                    {{ album.album_name }}
+                    {% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for album in albums %}
+                    {% if album.musician_id == musician.id %}
+                    {{ album.release_date }}
+                    {% endif %}
+                    {% endfor %}
+                </td>
+                {% if user.is_authenticated %}
+                <td>
+                    {% for album in albums %}
+                    {% if album.musician_id == musician.id %}
+                    <a href="{% url 'edit_album' album.id %}">
+                        <button type="button" class="btn btn-primary">Edit</button>
+                    </a>
+                    {% endif %}
+                    {% endfor %}
+                    <a href="{% url 'musician_delete' musician.id %}">
+                        <button type="button" class="btn btn-danger">Delete</button>
+                    </a>
+                </td>
+
+
+                {%endif %}
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="8" style="font-size:60px;">
+                    <p class="text-center">No musicians found.</p>
+                </td>
+            </tr>
+
+            {% endif %}
+        </tbody>
+    </table>
+</div>
 
 {% endblock %}

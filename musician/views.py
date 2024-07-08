@@ -14,14 +14,19 @@ def musician_list(request):
 
 
 def create_musician(request):
-    if request.method == 'POST':
-        form = MusicianForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect(musician_list)
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            form = MusicianForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('musician_list')
+        else:
+            form = MusicianForm()
+
+        return render(request, 'musician_form.html', {'form': form})
     else:
-        form = MusicianForm()
-    return render(request, 'musician_form.html', {'form': form})
+        return redirect('login_page')
+
 
 
 def musician_update(request, id):
